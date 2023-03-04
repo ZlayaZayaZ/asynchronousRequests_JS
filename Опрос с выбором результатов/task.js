@@ -2,8 +2,7 @@ const pollAnswers = document.getElementById('poll__answers')
 const pollTitle = document.getElementById('poll__title')
 
 const xhr = new XMLHttpRequest()
-xhr.open('GET', 'https://students.netoservices.ru/nestjs-backend/poll')
-xhr.send()
+request(xhr, 'GET', 'https://students.netoservices.ru/nestjs-backend/poll')
 
 xhr.addEventListener('readystatechange', (event) => {
     event.preventDefault()
@@ -31,9 +30,8 @@ xhr.addEventListener('readystatechange', (event) => {
                 // location.reload()
 
                 const xhrStatistics = new XMLHttpRequest()
-                xhrStatistics.open( 'POST', 'https://students.netoservices.ru/nestjs-backend/poll' );
-                xhrStatistics.setRequestHeader( 'Content-type', 'application/x-www-form-urlencoded' );
-                xhrStatistics.send( `vote=${result.id}&answer=${btn.dataset.id}` );
+                options = {'vote': result.id, 'answer': btn.dataset.id}
+                request(xhrStatistics, 'POST', 'https://students.netoservices.ru/nestjs-backend/poll', options)
 
                 xhrStatistics.addEventListener('readystatechange', (event) => {
                     event.preventDefault()
@@ -64,3 +62,18 @@ xhr.addEventListener('readystatechange', (event) => {
         })
     }
 })
+
+function request(obj, method, url, options) {
+    obj.open(method, url)
+    
+    if (options) {
+        obj.setRequestHeader( 'Content-type', 'application/x-www-form-urlencoded' )
+        let optionsString = ''
+        for (let key in options) {
+            optionsString += `${key}=${options[key]}&`
+        }
+        obj.send( optionsString.slice(0, -1) )
+    } else {
+    obj.send()
+    }
+}

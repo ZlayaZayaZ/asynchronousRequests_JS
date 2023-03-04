@@ -1,7 +1,7 @@
 const loader = document.querySelector('.loader')
 const items = document.getElementById('items')
 
-let xhr = new XMLHttpRequest()
+const xhr = new XMLHttpRequest()
 xhr.addEventListener('readystatechange', (event) => {
     event.preventDefault()
 
